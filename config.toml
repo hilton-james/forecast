@@ -1,0 +1,4 @@
+debug = true
+
+[forecast]
+listen_port = ":5001"
