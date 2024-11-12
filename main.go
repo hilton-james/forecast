@@ -6,6 +6,7 @@ import (
 
 	"github.com/hilton-james/forecast/config"
 	"github.com/hilton-james/forecast/handler"
+	"github.com/hilton-james/forecast/utils"
 	"go.uber.org/zap"
 )
 
@@ -35,7 +36,7 @@ func main() {
 			Handler: forecastHTTP,
 		}
 
-		forecastHTTP.HandleFunc("GET /forecast", forecast.GetForecast)
+		forecastHTTP.HandleFunc("GET /forecast", utils.HandleApiError(forecast.GetForecast))
 	}
 	if err := forecastServer.ListenAndServe(); err != http.ErrServerClosed {
 		logger.Fatal("server error", zap.Error(err))
