@@ -15,3 +15,25 @@ curl -X GET "https://api.weather.gov/gridpoints/HNX/change,change/forecast" -H "
 ```
 
 On the above, you can see how my program works to return the forecast.
+
+
+# How to Run
+1. Clone the program:
+``` bash
+git clone https://github.com/hilton-james/forecast
+
+```
+2. Run:
+``` bash
+make run
+```
+ After running the program with ```make run``` it gives you and endpoint on *http://localhost:5001/forecase* which receives *lat* (latitude) and *long* (longitude). You can send request with ```curl```
+
+``` bash
+curl -v 'localhost:5001/forecast?lat=change&long=change'
+```
+In response, you should receive  *lat* (latitude) and *long* (longitude) if they are right.
+
+``` json
+{"forecast":"Partly Cloudy then Areas Of Fog","temperature":"moderate"}
+```
