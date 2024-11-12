@@ -14,7 +14,7 @@ func HandleApiError(f HandelApiErrorType) http.HandlerFunc {
 			w.WriteHeader(http.StatusBadRequest)
 			respErr := map[string]string{"error": err.Error()}
 			if jsonErr := json.NewEncoder(w).Encode(respErr); jsonErr != nil {
-				http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+				http.Error(w, `{"error": "Failed to encode response"}`, http.StatusInternalServerError)
 			}
 		}
 	}

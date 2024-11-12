@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"time"
 
@@ -34,7 +33,6 @@ func (f *Forecast) FetchFromApi(lat, long string) (*model.ExternalForecast, erro
 			Address string `json:"forecast"`
 		}
 	)
-
 	// curl -X GET "https://api.weather.gov/points/X,Y" -H "accept: application/ld+json"
 	{
 		var (
@@ -48,7 +46,6 @@ func (f *Forecast) FetchFromApi(lat, long string) (*model.ExternalForecast, erro
 			f.logger.Debug("api error", zap.Error(err))
 			return nil, err
 		}
-		log.Printf("%s", string(body))
 
 		err = json.Unmarshal(body, &forecastAddress)
 		if err != nil {

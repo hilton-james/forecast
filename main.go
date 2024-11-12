@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/hilton-james/forecast/config"
 	"github.com/hilton-james/forecast/handler"
@@ -38,7 +42,27 @@ func main() {
 
 		forecastHTTP.HandleFunc("GET /forecast", utils.HandleApiError(forecast.GetForecast))
 	}
-	if err := forecastServer.ListenAndServe(); err != http.ErrServerClosed {
-		logger.Fatal("server error", zap.Error(err))
+
+	{
+		stop := make(chan os.Signal)
+		serverError := make(chan error)
+		signal.Notify(stop, os.Kill, os.Interrupt)
+		go func() {
+			if err := forecastServer.ListenAndServe(); err != http.ErrServerClosed {
+				serverError <- err
+			}
+		}()
+
+		select {
+		case err := <-serverError:
+			log.Fatalf("server error: %+v\n", err)
+		case <-stop:
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
+			if err := forecastServer.Shutdown(ctx); err != nil {
+				log.Fatalf("shutdown error: %+v\n", err)
+			}
+			log.Println("closed")
+		}
 	}
 }

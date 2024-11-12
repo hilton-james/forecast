@@ -23,7 +23,7 @@ func (f *Forecast) FetchForecast(lat, long string) (*model.Forecast, error) {
 		err      error
 		response model.Forecast
 	)
-	f.logger.Info("service", zap.String("lat", lat), zap.String("long", long))
+	// f.logger.Info("service", zap.String("lat", lat), zap.String("long", long))
 
 	var forecastInformation *model.ExternalForecast
 	{
